@@ -15,6 +15,45 @@ class App extends React.Component {
     }
   }
 
+  fetchGetHelper = (url,callback) => {
+    fetch(url,{
+      method: "GET",
+      headers:{
+        contentType: 'application/json; charset=utf-8',
+      }
+    }).then(resp => resp.json().then(callback))
+  }
+
+  onChangeType = event => {
+    this.setState({filters: {
+      type: event.target.value
+    }})
+  }
+
+  setStatePets = data => {
+    console.log(data)
+    this.setState({
+    })
+  }
+
+  onFindPetsClick = event => {
+    const type = this.state.filters.type
+    switch (type) {
+      case "all":
+        this.fetchGetHelper("api/pets", this.setStatePets());
+        break
+      case "cat":
+        this.fetchGetHelper("api/pets?type=cat", this.setStatePets());
+        break
+      case "dog":
+        this.fetchGetHelper("api/pets?type=dog", this.setStatePets());
+        break
+      case "micropig":
+        this.fetchGetHelper("api/pets?type=micropig", this.setStatePets());
+        break
+    }
+  }
+
   render() {
     return (
       <div className="ui container">
@@ -24,7 +63,7 @@ class App extends React.Component {
         <div className="ui container">
           <div className="ui grid">
             <div className="four wide column">
-              <Filters />
+              <Filters onChangeType={this.onChangeType} onFindPetsClick={this.onFindPetsClick}/>
             </div>
             <div className="twelve wide column">
               <PetBrowser />
